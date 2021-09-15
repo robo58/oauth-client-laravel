@@ -14,7 +14,7 @@ class PassportProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase('http://central-api.test/oauth/authorize', $state);
+        return $this->buildAuthUrlFromBase(env('PASSPORT_SERVER_AUTHORIZE_URL'), $state);
     }
 
     /**
@@ -22,7 +22,7 @@ class PassportProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getTokenUrl()
     {
-        return 'http://central-api.test/oauth/token';
+        return env('PASSPORT_SERVER_TOKEN_URL');
     }
 
     /**
@@ -31,7 +31,7 @@ class PassportProvider extends AbstractProvider implements ProviderInterface
     protected function getUserByToken($token)
     {
         $response = $this->getHttpClient()->get(
-            'http://central-api.test/api/user',
+            env('PASSPORT_SERVER_USER_URL'),
             $this->getRequestOptions($token)
         );
         return json_decode($response->getBody(), true);
