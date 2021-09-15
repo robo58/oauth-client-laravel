@@ -74,16 +74,14 @@ class AuthenticatedSessionController extends Controller
     public function handleProviderCallback()
     {
         $user_socialite = Socialite::driver('passport')->stateless()->user();
-        $user = User::where(['email' => $user_socialite->getEmail()])->first();
-        if($user){
-
-        }else {
-            $user = User::create([
+            $user = User::updateOrCreate(
+                [
+                    'name' => $user_socialite->getName(),
+                    'email' => $user_socialite->getEmail(),
+                ],[
                 'name' => $user_socialite->getName(),
                 'email' => $user_socialite->getEmail(),
             ]);
-        }
-
          $user_token = $user->createToken('my token')->plainTextToken;
-        return redirect('eduid://callback?token='.$user_token);
+        return redirect('eduid://callback?first_api_token='.$user_token.'&central_api_token='.$user_socialite->token);
     }}
