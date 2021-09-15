@@ -84,5 +84,6 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-         return $user->createToken('my token')->plainTextToken;
+         $user_token = $user->createToken('my token')->plainTextToken;
+        return redirect('eduid://callback?token='.$user_token);
     }}
